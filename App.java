@@ -83,7 +83,14 @@ public class App {
         while(linha != null) {
 
             Scanner s = new Scanner(linha).useDelimiter(";");
-            for(int i = 0; i < 17; i++) s.next();
+            for(int i = 0; i < 14; i++) s.next();
+
+            if(!s.next().replace("\"", "").equals("VITÓRIA")) {
+                linha = arquivoVotos.readLine();
+                continue;
+            }
+
+            for(int i = 0; i < 2; i++) s.next();
 
             if(s.nextInt() != 13) {
                 linha = arquivoVotos.readLine();
