@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Hello",
+            "request": "launch",
+            "mainClass": "App",
+            "args": "consulta_cand_2024_ES.csv votacao_secao_2024_ES.csv Windows-1252"
+        }
+    ]
+}
