@@ -5,13 +5,15 @@ public class Partido {
     private int numero;
     private String nome;
     private HashMap<Integer, Candidato> candidatos = new HashMap<Integer, Candidato>();
-    private int quantidadeEleitos = 0;
+    private int quantidadeEleitos;
     private int votos;
-    private boolean federacao = false;
+    private int votosLegenda;
+    private boolean federacao;
 
-    public Partido(int numero, String nome) {
+    public Partido(int numero, String nome, boolean federacao) {
         this.numero = numero;
         this.nome = nome;
+        this.federacao = federacao;
     }
 
     public int getNumero() {
@@ -30,8 +32,16 @@ public class Partido {
         return quantidadeEleitos;
     }
 
-    public int getVotos() {
+    public int getVotosNominais() {
         return votos;
+    }
+
+    public int getVotosLegenda() {
+        return votosLegenda;
+    }
+
+    public int getVotos() {
+        return votos + votosLegenda;
     }
 
     public void setFederacao(boolean v) {
@@ -44,6 +54,18 @@ public class Partido {
 
     public boolean isFederacao() {
         return federacao;
+    }
+
+    public void adicionaVotos(int novosVotos) {
+        votos += novosVotos;
+    }
+
+    public void adicionaVotosLegenda(int novosVotos) {
+        votosLegenda += novosVotos;
+    }
+
+    public void aumentaQuantidadeEleitos() {
+        quantidadeEleitos++;
     }
 
 }
