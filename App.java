@@ -7,6 +7,8 @@ public class App {
     
     public static void main(String[] args) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
+        String CIDADE = "VITÓRIA";
+
         HashMap<Integer, Partido> partidos = new HashMap<Integer, Partido>();
         HashMap<Integer, Candidato> candidatos = new HashMap<Integer, Candidato>();
 
@@ -19,7 +21,7 @@ public class App {
             Scanner s = new Scanner(linha).useDelimiter(";");
             for(int i = 0; i < 12; i++) s.next();
 
-            if(!s.next().replace("\"", "").equals("VITÓRIA")) {
+            if(!s.next().replace("\"", "").equals(CIDADE)) {
                 linha = arquivoCandidatos.readLine();
                 continue;
             }
@@ -31,7 +33,7 @@ public class App {
 
             int numero;
             String nome;
-            int idade;
+            String nascimento;
             int genero;
             Candidato candidato;
 
@@ -42,9 +44,12 @@ public class App {
             for(int i = 0; i < 2; i++) s.next();
 
             numero = s.nextInt();
+
+            s.next();
+
             nome = s.next().replace("\"", "");
 
-            for(int i = 0; i < 6; i++) s.next();
+            for(int i = 0; i < 5; i++) s.next();
 
             if(s.next().replace("\"", "").equals("FEDERAÇÃO")) federacao = true;
 
@@ -57,8 +62,7 @@ public class App {
 
             for(int i = 0; i < 9; i++) s.next();
 
-            String[] nascimento = s.next().split("/");
-            idade = 2024 - Integer.valueOf(nascimento[2].replace("\"", ""));
+            nascimento = s.next().replace("\"", "");
             
             s.next();
 
@@ -66,7 +70,12 @@ public class App {
 
             for(int i = 0; i < 10; i++) s.next();
 
-            candidato = new Candidato(numero, nome, partidos.get(numeroPartido), idade, genero, (s.next().replace("\"", "").equals("ELEITO POR QP")));
+            String eleicao = s.next().replace("\"", "");
+            int resultado = 0;
+            if(eleicao.equals("ELEITO POR QP")) resultado = 1;
+            else if(eleicao.equals("ELEITO POR MÉDIA")) resultado = 2;
+
+            candidato = new Candidato(numero, nome, partidos.get(numeroPartido), nascimento, genero, resultado);
             candidatos.put(candidato.getNumero(), candidato);
             partidos.get(numeroPartido).adicionaCandidato(candidato);
 
@@ -85,7 +94,7 @@ public class App {
             Scanner s = new Scanner(linha).useDelimiter(";");
             for(int i = 0; i < 14; i++) s.next();
 
-            if(!s.next().replace("\"", "").equals("VITÓRIA")) {
+            if(!s.next().replace("\"", "").equals(CIDADE)) {
                 linha = arquivoVotos.readLine();
                 continue;
             }
