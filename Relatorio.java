@@ -125,7 +125,7 @@ public class Relatorio {
         int n = 0;
         for(Partido p : list_partidos){
             n++;
-            if(p.getCandidatos().size() == 0) continue;
+            if(p.getVotosNominais() == 0) continue;
 
             System.out.printf("%d - %s - %d, ", n, p.getNome(), p.getNumero());
             Candidato primeiro = p.getCandidadoPosicao(0);
