@@ -4,16 +4,21 @@ import java.lang.reflect.*;
 public class Relatorio {
     private HashMap<Integer, Candidato> candidatos;
     private HashMap<Integer, Partido> partidos;
-    private Comparator<Candidato> comp = new ComparaVotos();
+    private Comparator<Candidato> comp_candidatos = new ComparaCandidatos();
+    private Comparator<Partido> comp_partidos = new ComparaPartidos();
+    private Comparator<Partido> comp_partidos_posicao = new ComparaPartidosPosicao();
     private int vagas = 0;
     private LinkedList<Candidato> candidatos_lista;
+    private LinkedList<Candidato> eleitos_lista = new LinkedList<Candidato>();
 
     public Relatorio(HashMap<Integer, Candidato> candidatos, HashMap<Integer, Partido> partidos) {
         this.candidatos = candidatos;
         this.partidos = partidos;
 
         candidatos_lista = new LinkedList<Candidato>(candidatos.values());
-        Collections.sort(candidatos_lista, comp);
+        Collections.sort(candidatos_lista, comp_candidatos);
+
+        for(Candidato c : candidatos.values()) if(c.isEleito()) eleitos_lista.add(c);
     }
 
     public void relatorio1(){
@@ -33,7 +38,7 @@ public class Relatorio {
             if(!c.isEleito()) continue;
             System.out.printf("%d - ", n++);
             if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %d votos)\n", c.getNome(), c.getPartido().getNome(),c.getVotos());
+            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
         }
     }
 
@@ -46,7 +51,7 @@ public class Relatorio {
             if(n > this.vagas) break;
             System.out.printf("%d - ", n++);
             if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %d votos)\n", c.getNome(), c.getPartido().getNome(),c.getVotos());
+            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
         }
     }
 
@@ -63,7 +68,7 @@ public class Relatorio {
 
             System.out.printf("%d - ", n);
             if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %d votos)\n", c.getNome(), c.getPartido().getNome(),c.getVotos());
+            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
         }
     }
 
@@ -80,26 +85,30 @@ public class Relatorio {
 
             System.out.printf("%d - ", n);
             if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %d votos)\n", c.getNome(), c.getPartido().getNome(),c.getVotos());
+            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
         }
     }
 
     public void relatorio6(){
         System.out.println("Votação dos partidos e número de candidatos eleitos:");
 
+        List<Partido> list_partidos = new LinkedList<Partido>(this.partidos.values());
+        Collections.sort(list_partidos, comp_partidos);
+
         int n = 1;
-        for(Partido p : this.partidos.values()){
-            System.out.printf("%d - %s, ", n++, p.getNome());
+        for(Partido p : list_partidos){
+            System.out.printf("%d - %s - %d, ", n++, p.getNome(), p.getNumero());
 
-            if(p.getVotos() > 1) System.out.print(p.getVotos() + " votos (");
-            else System.out.print(p.getVotos() + " voto (");
+            if(p.getVotos() > 1) System.out.printf("%s votos (", String.format("%,d", p.getVotos()));
+            else System.out.printf("%s voto (", String.format("%,d", p.getVotos()));
 
-            /*if(p.getVotosNominais() > 1) System.out.print(p.getVotosNominais() + " nominais e ");
-            else System.out.print(p.getVotosNominais() + " nominal e ");
+            if(p.getVotosNominais() > 1) System.out.printf("%s nominais e ", String.format("%,d", p.getVotosNominais()));
+            else System.out.printf("%s nominal e ", String.format("%,d", p.getVotosNominais()));
 
-            System.out.print(p.getVotosLegenda() + " de legenda),  ");*/
+            System.out.printf("%s de legenda) ", String.format("%,d", p.getVotosLegenda()));;
 
-            System.out.println(p.getQuantidadeEleitos() + "candidatos eleitos");
+            if(p.getQuantidadeEleitos() > 1) System.out.printf("%s candidatos eleitos\n", String.format("%,d", p.getQuantidadeEleitos()));
+            else System.out.printf("%s candidato eleito\n", String.format("%,d", p.getQuantidadeEleitos()));
 
         }
     }
@@ -108,20 +117,25 @@ public class Relatorio {
 
         System.out.println("Primeiro e último colocados de cada partido:");
 
+
+        List<Partido> list_partidos = new LinkedList<Partido>();
+        for(Partido p : this.partidos.values()) if(p.getCandidatos().size() != 0) list_partidos.add(p);
+        Collections.sort(list_partidos, comp_partidos_posicao);
+
         int n = 0;
-        for(Partido p : this.partidos.values()){
+        for(Partido p : list_partidos){
             n++;
-            //if(p.getVotos() <= 0) continue;
+            if(p.getCandidatos().size() == 0) continue;
 
-            System.out.printf("%d - %s, ", n, p.getNome());
-            List<Candidato> p_candidatos = new LinkedList<Candidato>(p.getCandidatos().values());
+            System.out.printf("%d - %s - %d, ", n, p.getNome(), p.getNumero());
+            Candidato primeiro = p.getCandidadoPosicao(0);
 
-            Collections.sort(p_candidatos, this.comp);
-            Candidato primeiro = p_candidatos.get(0);
-            Candidato ultimo = p_candidatos.get(p_candidatos.size() - 1);
+            int size = p.getCandidatos().size() - 1;
+            Candidato ultimo = p.getCandidadoPosicao(size--);
+            while(ultimo.getVotos() == 0) ultimo = p.getCandidadoPosicao(size--);
 
-            System.out.printf("%s (%d, %d votos) / ", primeiro.getNome(), primeiro.getNumero(), primeiro.getVotos());
-            System.out.printf("%s (%d, %d votos)\n", ultimo.getNome(), ultimo.getNumero(), ultimo.getVotos());
+            System.out.printf("%s (%d, %s votos) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
+            System.out.printf("%s (%d, %s votos)\n", ultimo.getNome(), ultimo.getNumero(), String.format("%,d", ultimo.getVotos()));
         }
     }
 
@@ -129,7 +143,7 @@ public class Relatorio {
         int b30 = 0, b30_40 = 0, b40_50 = 0, b50_60 = 0, b60 = 0;
 
         int idade = 0;
-        for(Candidato c : candidatos_lista){
+        for(Candidato c : eleitos_lista){
             idade = c.getIdade();
 
             if(idade < 30) b30++;
@@ -139,31 +153,31 @@ public class Relatorio {
             else b60++;
         }
 
-        float total = candidatos_lista.size();
+        float total = eleitos_lista.size();
 
         System.out.println("Eleitos, por faixa etária (na data da eleição):");
 
-        System.out.printf("      Idade < 30: %d (%.2f%%)\n", b30, (b30 * 100) / total);
-        System.out.printf("30 <= Idade < 40: %d (%.2f%%)\n", b30_40, (b30_40 * 100) / total);
-        System.out.printf("40 <= Idade < 50: %d (%.2f%%)\n", b40_50, (b40_50 * 100) / total);
-        System.out.printf("50 <= Idade < 60: %d (%.2f%%)\n", b50_60, (b50_60 * 100) / total);
-        System.out.printf("60 <= Idade     : %d (%.2f%%)\n", b60, (b60 * 100) / total);
+        System.out.printf("      Idade < 30: %s (%.2f%%)\n", String.format("%,d", b30), (b30 * 100) / total);
+        System.out.printf("30 <= Idade < 40: %s (%.2f%%)\n", String.format("%,d", b30_40), (b30_40 * 100) / total);
+        System.out.printf("40 <= Idade < 50: %s (%.2f%%)\n", String.format("%,d", b40_50), (b40_50 * 100) / total);
+        System.out.printf("50 <= Idade < 60: %s (%.2f%%)\n", String.format("%,d", b50_60), (b50_60 * 100) / total);
+        System.out.printf("60 <= Idade     : %s (%.2f%%)\n", String.format("%,d", b60), (b60 * 100) / total);
     }
 
     public void relatorio9(){
         int m = 0, f = 0;
 
-        for(Candidato c : candidatos_lista){
+        for(Candidato c : eleitos_lista){
             if(c.getGenero() == 2) m++;
             else f++;
         }
 
-        float total = candidatos_lista.size();
+        float total = eleitos_lista.size();
 
         System.out.println("Eleitos, por gênero:");
 
-        System.out.printf("Feminino: %d (%.2f%%)\n", f, (f * 100) / total);
-        System.out.printf("Masculino: %d (%.2f%%)\n", m, (m * 100) / total);
+        System.out.printf("Feminino: %s (%.2f%%)\n", String.format("%,d", f), (f * 100) / total);
+        System.out.printf("Masculino: %s (%.2f%%)\n", String.format("%,d", m), (m * 100) / total);
     }
 
     public void relatorio10(){
@@ -171,13 +185,13 @@ public class Relatorio {
 
         for(Partido p : this.partidos.values()){
             total += p.getVotos();
-            /*legenda += p.getVotosLegenda();
-            nominal += p.getVotosNominais();*/
+            legenda += p.getVotosLegenda();
+            nominal += p.getVotosNominais();
         }
 
-        System.out.printf("Total de votos válidos: %d\n", total);
-        System.out.printf("Total de votos nominais: %d (%.2f)\n", total, (float) (nominal * 100) / total);
-        System.out.printf("Total de votos de legenda: %d (%.2f)\n", total, (float) (legenda * 100) / total);
+        System.out.printf("Total de votos válidos: %s\n", String.format("%,d", total));
+        System.out.printf("Total de votos nominais: %s (%.2f%%)\n", String.format("%,d", nominal), (float) (nominal * 100) / total);
+        System.out.printf("Total de votos de legenda: %s (%.2f%%)\n", String.format("%,d", legenda), (float) (legenda * 100) / total);
     }
 
     public void geraRelatorio() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
