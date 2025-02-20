@@ -24,12 +24,11 @@ public class App {
             int flagVereador = 1;
             if(!s.next().replace("\"", "").equals(CIDADE)) {
                 linha = arquivoCandidatos.readLine();
+                s.close();
                 continue;
             }
 
-            if(s.nextInt() != 13) {
-                flagVereador = 0;
-            }
+            if(s.nextInt() != 13) flagVereador = 0;
 
             int numero;
             String nome;
@@ -62,6 +61,7 @@ public class App {
 
             if(flagVereador == 0) {
                 linha = arquivoCandidatos.readLine();
+                s.close();
                 continue;
             }
 
@@ -101,13 +101,16 @@ public class App {
 
             if(!s.next().replace("\"", "").equals(CIDADE)) {
                 linha = arquivoVotos.readLine();
+                s.close();
                 continue;
             }
 
             for(int i = 0; i < 2; i++) s.next();
 
+
             if(s.nextInt() != 13) {
                 linha = arquivoVotos.readLine();
+                s.close();
                 continue;
             }
 
@@ -121,6 +124,13 @@ public class App {
             s.next();
 
             votos = s.nextInt();
+
+            if(numeroCandidato <= 94) {
+                partidos.get(numeroCandidato).adicionaVotosLegenda(votos);
+                linha = arquivoVotos.readLine();
+                s.close();
+                continue;
+            }
 
             if(candidatos.get(numeroCandidato) != null) candidatos.get(numeroCandidato).aumentaVotos(votos);
 
