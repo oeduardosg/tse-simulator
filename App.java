@@ -21,14 +21,14 @@ public class App {
             Scanner s = new Scanner(linha).useDelimiter(";");
             for(int i = 0; i < 12; i++) s.next();
 
+            int flagVereador = 1;
             if(!s.next().replace("\"", "").equals(CIDADE)) {
                 linha = arquivoCandidatos.readLine();
                 continue;
             }
 
             if(s.nextInt() != 13) {
-                linha = arquivoCandidatos.readLine();
-                continue;
+                flagVereador = 0;
             }
 
             int numero;
@@ -58,6 +58,11 @@ public class App {
 
             if(partidos.get(numeroPartido) == null) {
                 partidos.put(numeroPartido, new Partido(numeroPartido, nomePartido, federacao));
+            }
+
+            if(flagVereador == 0) {
+                linha = arquivoCandidatos.readLine();
+                continue;
             }
 
             for(int i = 0; i < 9; i++) s.next();
