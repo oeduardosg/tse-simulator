@@ -9,6 +9,7 @@ public class Partido {
     private int votos;
     private int votosLegenda;
     private boolean federacao;
+    private Comparator<Candidato> comp_candidatos = new ComparaCandidatos();
 
     public Partido(int numero, String nome, boolean federacao) {
         this.numero = numero;
@@ -66,6 +67,14 @@ public class Partido {
 
     public void aumentaQuantidadeEleitos() {
         quantidadeEleitos++;
+    }
+
+    public Candidato getCandidadoPosicao(int pos){
+        if(this.candidatos.size() == 0) return null;
+        List<Candidato> p_candidatos = new LinkedList<Candidato>(this.candidatos.values());
+
+        Collections.sort(p_candidatos, this.comp_candidatos);
+        return p_candidatos.get(pos);
     }
 
 }
