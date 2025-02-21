@@ -3,10 +3,24 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "src.App",
+            "projectName": "tse-simulator_ec05ba36"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "src.App",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "Launch Hello",
             "request": "launch",
             "mainClass": "App",
-            "args": "consulta_cand_2024_ES.csv votacao_secao_2024_ES.csv Windows-1252"
+            "args": "57053 ./consulta_cand_2024_ES.csv ./votacao_secao_2024_ES.csv 06/10/2024"
         }
     ]
 }

@@ -7,24 +7,27 @@ public class App {
     
     public static void main(String[] args) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
-        String CIDADE = "VITÓRIA";
+        int CIDADE = Integer.parseInt(args[0]);
+        String CODIFICACAO = "Windows-1252";
 
         HashMap<Integer, Partido> partidos = new HashMap<Integer, Partido>();
         HashMap<Integer, Candidato> candidatos = new HashMap<Integer, Candidato>();
 
-        Leitor arquivoCandidatos = new Leitor(args[0], args[2]);
+        Leitor arquivoCandidatos = new Leitor(args[1], CODIFICACAO);
         String linha = arquivoCandidatos.readLine();
         linha = arquivoCandidatos.readLine();
 
         while(linha != null) {
 
             Scanner s = new Scanner(linha).useDelimiter(";");
-            for(int i = 0; i < 12; i++) s.next();
+            for(int i = 0; i < 11; i++) s.next();
 
             int flagVereador = 1, flagCidade = 1;
-            if(!s.next().replace("\"", "").equals(CIDADE)) {
+            if(Integer.parseInt(s.next().replace("\"", "")) != CIDADE) {
                 flagCidade = 0;
             }
+
+            s.next();
 
             if(s.nextInt() != 13) flagVereador = 0;
 
@@ -88,20 +91,22 @@ public class App {
             
         }
 
-        Leitor arquivoVotos = new Leitor(args[1], args[2]);
+        Leitor arquivoVotos = new Leitor(args[2], CODIFICACAO);
         linha = arquivoVotos.readLine();
         linha = arquivoVotos.readLine();
 
         while(linha != null) {
 
             Scanner s = new Scanner(linha).useDelimiter(";");
-            for(int i = 0; i < 14; i++) s.next();
+            for(int i = 0; i < 13; i++) s.next();
 
-            if(!s.next().replace("\"", "").equals(CIDADE)) {
+            if(Integer.parseInt(s.next().replace("\"", "")) != CIDADE) {
                 linha = arquivoVotos.readLine();
                 s.close();
                 continue;
             }
+
+            s.next();
 
             for(int i = 0; i < 2; i++) s.next();
 
