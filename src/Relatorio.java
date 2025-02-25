@@ -105,7 +105,7 @@ public class Relatorio {
             if(p.getVotosNominais() > 1) System.out.printf("%s nominais e ", String.format("%,d", p.getVotosNominais()));
             else System.out.printf("%s nominal e ", String.format("%,d", p.getVotosNominais()));
 
-            System.out.printf("%s de legenda) ", String.format("%,d", p.getVotosLegenda()));;
+            System.out.printf("%s de legenda), ", String.format("%,d", p.getVotosLegenda()));;
 
             if(p.getQuantidadeEleitos() > 1) System.out.printf("%s candidatos eleitos\n", String.format("%,d", p.getQuantidadeEleitos()));
             else System.out.printf("%s candidato eleito\n", String.format("%,d", p.getQuantidadeEleitos()));
@@ -134,8 +134,12 @@ public class Relatorio {
             Candidato ultimo = p.getCandidadoPosicao(size--);
             while(ultimo.getVotos() == 0) ultimo = p.getCandidadoPosicao(size--);
 
-            System.out.printf("%s (%d, %s votos) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
-            System.out.printf("%s (%d, %s votos)\n", ultimo.getNome(), ultimo.getNumero(), String.format("%,d", ultimo.getVotos()));
+            if(primeiro.getVotos() > 1) System.out.printf("%s (%d, %s votos) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
+            else System.out.printf("%s (%d, %s voto) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
+
+
+            if(ultimo.getVotos() > 1) System.out.printf("%s (%d, %s votos)\n", ultimo.getNome(), ultimo.getNumero(), String.format("%,d", ultimo.getVotos()));
+            else System.out.printf("%s (%d, %s voto)\n", ultimo.getNome(), ultimo.getNumero(), String.format("%,d", ultimo.getVotos()));
         }
     }
 

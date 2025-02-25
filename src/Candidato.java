@@ -60,7 +60,7 @@ public class Candidato {
         if(Integer.valueOf(datas[1]) < 10) return idade;
         else if(Integer.valueOf(datas[1]) > 10) return idade - 1;
         else {
-            if(Integer.valueOf(datas[0]) <= 28) return idade;
+            if(Integer.valueOf(datas[0]) <= 6) return idade;
             else return idade - 1;
         }
 
