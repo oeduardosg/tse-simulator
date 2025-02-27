@@ -132,7 +132,6 @@ public class Relatorio {
 
             int size = p.getCandidatos().size() - 1;
             Candidato ultimo = p.getCandidadoPosicao(size--);
-            while(ultimo.getVotos() == 0) ultimo = p.getCandidadoPosicao(size--);
 
             if(primeiro.getVotos() > 1) System.out.printf("%s (%d, %s votos) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
             else System.out.printf("%s (%d, %s voto) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));

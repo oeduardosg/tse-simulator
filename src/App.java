@@ -74,16 +74,20 @@ public class App {
 
             genero = s.nextInt();
 
-            for(int i = 0; i < 10; i++) s.next();
+            for(int i = 0; i < 9; i++) s.next();
+
+            int eleito = s.nextInt();
 
             String eleicao = s.next().replace("\"", "");
             int resultado = 0;
             if(eleicao.equals("ELEITO POR QP")) resultado = 1;
             else if(eleicao.equals("ELEITO POR MÉDIA")) resultado = 2;
 
-            candidato = new Candidato(numero, nome, partidos.get(numeroPartido), nascimento, genero, resultado);
-            candidatos.put(candidato.getNumero(), candidato);
-            partidos.get(numeroPartido).adicionaCandidato(candidato);
+            if(eleito > -1){
+                candidato = new Candidato(numero, nome, partidos.get(numeroPartido), nascimento, genero, resultado);
+                candidatos.put(candidato.getNumero(), candidato);
+                partidos.get(numeroPartido).adicionaCandidato(candidato);
+            }
 
             linha = arquivoCandidatos.readLine();
 
