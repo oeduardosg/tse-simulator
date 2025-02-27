@@ -88,6 +88,13 @@ public class Candidato {
         votos += novosVotos;
     }
 
+    public void imprimeCandidato(int n){
+        System.out.printf("%d - ", n);
+
+        if(this.getPartido().isFederacao()) System.out.printf("*");
+        System.out.printf("%s (%s, %s votos)\n", this.getNome(), this.getPartido().getNome(), String.format("%,d", this.getVotos()));
+    }
+
     @Override
     public String toString() {
         return "Candidato: " + getNome() + "\n";

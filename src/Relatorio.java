@@ -2,31 +2,27 @@ import java.util.*;
 import java.lang.reflect.*;
 
 public class Relatorio {
-    private HashMap<Integer, Candidato> candidatos;
     private HashMap<Integer, Partido> partidos;
+    private LinkedList<Candidato> candidatos;
+    private LinkedList<Candidato> eleitos_lista = new LinkedList<Candidato>();
+
+
     private Comparator<Candidato> comp_candidatos = new ComparaCandidatos();
     private Comparator<Partido> comp_partidos = new ComparaPartidos();
     private Comparator<Partido> comp_partidos_posicao = new ComparaPartidosPosicao();
-    private int vagas = 0;
-    private LinkedList<Candidato> candidatos_lista;
-    private LinkedList<Candidato> eleitos_lista = new LinkedList<Candidato>();
 
     public Relatorio(HashMap<Integer, Candidato> candidatos, HashMap<Integer, Partido> partidos) {
-        this.candidatos = candidatos;
         this.partidos = partidos;
+        this.candidatos = new LinkedList<Candidato>(candidatos.values());
+        Collections.sort(this.candidatos, comp_candidatos);
 
-        candidatos_lista = new LinkedList<Candidato>(candidatos.values());
-        Collections.sort(candidatos_lista, comp_candidatos);
-
-        for(Candidato c : candidatos.values()) if(c.isEleito()) eleitos_lista.add(c);
+        for(Candidato c : this.candidatos) if(c.isEleito()) eleitos_lista.add(c);
     }
 
     public void relatorio1(){
-        int qtd = 0;
-        for(Candidato c : candidatos.values()) if(c.isEleito()) qtd++;
 
-        System.out.println("Número de vagas: " + qtd);
-        this.vagas = qtd;
+        System.out.println("Número de vagas: " + eleitos_lista.size());
+
     }
 
     public void relatorio2(){
@@ -34,11 +30,10 @@ public class Relatorio {
         System.out.println("Vereadores eleitos:");
 
         int n = 1;
-        for(Candidato c : this.candidatos_lista) {
+        for(Candidato c : this.candidatos) {
             if(!c.isEleito()) continue;
-            System.out.printf("%d - ", n++);
-            if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
+
+            c.imprimeCandidato(n++);
         }
     }
 
@@ -47,11 +42,10 @@ public class Relatorio {
         System.out.println("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):");
 
         int n = 1;
-        for(Candidato c : this.candidatos_lista) {
-            if(n > this.vagas) break;
-            System.out.printf("%d - ", n++);
-            if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
+        for(Candidato c : this.candidatos) {
+            if(n > eleitos_lista.size()) break;
+
+            c.imprimeCandidato(n++);
         }
     }
 
@@ -60,15 +54,13 @@ public class Relatorio {
         System.out.println("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n" + "(com sua posição no ranking de mais votados)");
 
         int n = 0;
-        for(Candidato c : this.candidatos_lista) {
+        for(Candidato c : this.candidatos) {
             n++;
-            if(n > this.vagas) break;
+            if(n > eleitos_lista.size()) break;
 
             if(c.isEleito()) continue;
 
-            System.out.printf("%d - ", n);
-            if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
+            c.imprimeCandidato(n);
         }
     }
 
@@ -77,15 +69,13 @@ public class Relatorio {
         System.out.println("Eleitos, que se beneficiaram do sistema proporcional:\n" + "(com sua posição no ranking de mais votados)");
 
         int n = 0;
-        for(Candidato c : this.candidatos_lista) {
+        for(Candidato c : this.candidatos) {
             n++;
-            if(n <= this.vagas) continue;
+            if(n <= eleitos_lista.size()) continue;
 
             if(!c.isEleito()) continue;
 
-            System.out.printf("%d - ", n);
-            if(c.getPartido().isFederacao()) System.out.printf("*");
-            System.out.printf("%s (%s, %s votos)\n", c.getNome(), c.getPartido().getNome(), String.format("%,d", c.getVotos()));
+            c.imprimeCandidato(n);
         }
     }
 
@@ -99,11 +89,11 @@ public class Relatorio {
         for(Partido p : list_partidos){
             System.out.printf("%d - %s - %d, ", n++, p.getNome(), p.getNumero());
 
-            if(p.getVotos() > 1) System.out.printf("%s votos (", String.format("%,d", p.getVotos()));
-            else System.out.printf("%s voto (", String.format("%,d", p.getVotos()));
+            if(p.getVotos() > 1) System.out.printf("%s votos ", String.format("%,d", p.getVotos()));
+            else System.out.printf("%s voto ", String.format("%,d", p.getVotos()));
 
-            if(p.getVotosNominais() > 1) System.out.printf("%s nominais e ", String.format("%,d", p.getVotosNominais()));
-            else System.out.printf("%s nominal e ", String.format("%,d", p.getVotosNominais()));
+            if(p.getVotosNominais() > 1) System.out.printf("(%s nominais e ", String.format("%,d", p.getVotosNominais()));
+            else System.out.printf("(%s nominal e ", String.format("%,d", p.getVotosNominais()));
 
             System.out.printf("%s de legenda), ", String.format("%,d", p.getVotosLegenda()));;
 
