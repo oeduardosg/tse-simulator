@@ -7,13 +7,15 @@ public class Candidato {
     private int eleito;
     private int genero;
     private int votos;
+    private String dataEleicao;
 
-    public Candidato(int numero, String nome, Partido partido, String nascimento, int genero, int eleito) {
+    public Candidato(int numero, String nome, Partido partido, String nascimento, int genero, int eleito, String dataEleicao) {
         this.numero = numero;
         this.nome = nome;
         this.partido = partido;
         this.nascimento = nascimento;
         this.genero = genero;
+        this.dataEleicao = dataEleicao;
         this.eleito = eleito;
         if(eleito > 0) partido.aumentaQuantidadeEleitos();
     }
@@ -54,13 +56,14 @@ public class Candidato {
 
     public int getIdade() {
         String[] datas = getNascimento().split("/");
+        String[] datasEleicao = this.dataEleicao.split("/");
 
-        int idade = 2024 - Integer.valueOf(datas[2]);
+        int idade = Integer.valueOf(datasEleicao[2]) - Integer.valueOf(datas[2]);
 
-        if(Integer.valueOf(datas[1]) < 10) return idade;
-        else if(Integer.valueOf(datas[1]) > 10) return idade - 1;
+        if(Integer.valueOf(datas[1]) < Integer.valueOf(datasEleicao[1])) return idade;
+        else if(Integer.valueOf(datas[1]) > Integer.valueOf(datasEleicao[1])) return idade - 1;
         else {
-            if(Integer.valueOf(datas[0]) <= 6) return idade;
+            if(Integer.valueOf(datas[0]) <= Integer.valueOf(datasEleicao[0])) return idade;
             else return idade - 1;
         }
 
@@ -88,7 +91,7 @@ public class Candidato {
         votos += novosVotos;
     }
 
-    public void imprimeCandidato(int n){
+    public void imprimeCandidato(int n) {
         System.out.printf("%d - ", n);
 
         if(this.getPartido().isFederacao()) System.out.printf("*");

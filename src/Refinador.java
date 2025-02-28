@@ -6,7 +6,7 @@ public class Refinador {
     private HashMap<Integer, Partido> partidos = new HashMap<Integer, Partido>();
     private HashMap<Integer, Candidato> candidatos = new HashMap<Integer, Candidato>();
 
-    public Refinador(int CIDADE, String CODIFICACAO, String candidatosFile, String votacaoFile) throws IOException, ParseException {
+    public Refinador(int CIDADE, String CODIFICACAO, String candidatosFile, String votacaoFile, String dataEleicao) throws IOException, ParseException {
 
         Leitor arquivoCandidatos = new Leitor(candidatosFile, CODIFICACAO);
         String linha = arquivoCandidatos.readLine();
@@ -79,7 +79,7 @@ public class Refinador {
             else if(eleicao.equals("ELEITO POR MÉDIA")) resultado = 2;
 
             if(eleito > -1){
-                candidato = new Candidato(numero, nome, partidos.get(numeroPartido), nascimento, genero, resultado);
+                candidato = new Candidato(numero, nome, partidos.get(numeroPartido), nascimento, genero, resultado, dataEleicao);
                 candidatos.put(candidato.getNumero(), candidato);
                 partidos.get(numeroPartido).adicionaCandidato(candidato);
             }
