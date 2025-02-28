@@ -1,6 +1,9 @@
 
 import java.util.Comparator;
 
+/**
+ * Responsável por comparar Partidos em relação ao candidato mais votado de cada um dos partidos
+ */
 public class ComparaPartidosPosicao implements Comparator<Partido>{
 
     private Comparator<Candidato> comp_candidatos = new ComparaCandidatos();

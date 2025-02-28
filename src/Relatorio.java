@@ -1,6 +1,14 @@
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * Classe responsável por gerar todos os relatórios requisitados, 
+ * cada relatório tem seu respectivo número, assim como na especificação do trabalho.
+ * 
+ * O cliente pode chamar individualmente cada um dos relatórios, 
+ * ou então chamar o método geraRelatorio, cuja função é chamar todos os outros métodos de relatório na sua respectiva ordem
+ */
+
 public class Relatorio {
     private HashMap<Integer, Partido> partidos;
     private LinkedList<Candidato> candidatos;
@@ -11,6 +19,13 @@ public class Relatorio {
     private Comparator<Partido> comp_partidos = new ComparaPartidos();
     private Comparator<Partido> comp_partidos_posicao = new ComparaPartidosPosicao();
 
+    /**
+     * Inicializa a classe Relatório, com todas as informações 
+     * úteis que podem ser necessária para gerar relatório
+     * 
+     * @param candidatos um HashMap de todos os candidatos a serem utilizados na geração dos relatórios
+     * @param partidos um HashMap de todos os partidos a serem utilizados na geração dos relatórios
+     */
     public Relatorio(HashMap<Integer, Candidato> candidatos, HashMap<Integer, Partido> partidos) {
         this.partidos = partidos;
         this.candidatos = new LinkedList<Candidato>(candidatos.values());
@@ -19,12 +34,18 @@ public class Relatorio {
         for(Candidato c : this.candidatos) if(c.isEleito()) eleitos_lista.add(c);
     }
 
+    /**
+     * Gera relatório sobre número de vagas
+     */
     public void relatorio1(){
 
         System.out.println("Número de vagas: " + eleitos_lista.size());
 
     }
 
+    /**
+     * Gera relatório com os vereadores eleitos em ordem decrescente de votos
+     */
     public void relatorio2(){
 
         System.out.println("Vereadores eleitos:");
@@ -37,6 +58,9 @@ public class Relatorio {
         }
     }
 
+    /**
+     * Gera relatório com todos os candidatos em ordem decrescente de votos (limitado pelo número de vagas)
+     */
     public void relatorio3(){
 
         System.out.println("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):");
@@ -49,6 +73,10 @@ public class Relatorio {
         }
     }
 
+    /**
+     * Gera relatório com os candidatos que não foram eleitos, mas seriam caso a votação fosse majoritária,
+     * em ordem decrescente de votos
+     */
     public void relatorio4(){
 
         System.out.println("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n" + "(com sua posição no ranking de mais votados)");
@@ -64,6 +92,10 @@ public class Relatorio {
         }
     }
 
+    /**
+     * Gera relatório com os candidatos que foram eleitos, mas não seriam caso a votação fosse majoritária,
+     * em ordem decrescente de votos
+     */
     public void relatorio5(){
 
         System.out.println("Eleitos, que se beneficiaram do sistema proporcional:\n" + "(com sua posição no ranking de mais votados)");
@@ -79,6 +111,11 @@ public class Relatorio {
         }
     }
 
+    /**
+     * Gera relatório com os informações sobre os partidos,
+     * como votos totalizados e candidatos eleitos por partido,
+     * organizado em ordem decrescente de votos totais do partido
+     */
     public void relatorio6(){
         System.out.println("Votação dos partidos e número de candidatos eleitos:");
 
@@ -103,6 +140,10 @@ public class Relatorio {
         }
     }
 
+    /**
+     * Gera relatório com os candidatos mais e menos votados de cada partido,
+     * em ordem decrescente de votos em relação ao mais votado de cada partido
+     */
     public void relatorio7(){
 
         System.out.println("Primeiro e último colocados de cada partido:");
@@ -132,6 +173,10 @@ public class Relatorio {
         }
     }
 
+    /**
+     * Gera relatório sobre a distribuição dos vereadores eleitos por faixa etária,
+     * considerando a idade no dia da votação
+     */
     public void relatorio8(){
         int b30 = 0, b30_40 = 0, b40_50 = 0, b50_60 = 0, b60 = 0;
 
@@ -162,6 +207,9 @@ public class Relatorio {
         System.out.printf("60 <= Idade     : %s (%.2f%%)\n", String.format("%,d", b60), (b60 * 100) / total);
     }
 
+    /**
+     * Gera relatório csobre a distribuição dos vereadores eleitos por sexo
+     */
     public void relatorio9(){
         int m = 0, f = 0;
 
@@ -183,6 +231,9 @@ public class Relatorio {
         System.out.printf("Masculino: %s (%.2f%%)\n", String.format("%,d", m), (m * 100) / total);
     }
 
+    /**
+     * Gera relatório com o total de votos, votos nominais e votos de legenda
+     */
     public void relatorio10(){
         int total = 0, legenda = 0, nominal = 0;
 
@@ -202,8 +253,21 @@ public class Relatorio {
         System.out.printf("Total de votos de legenda: %s (%.2f%%)\n", String.format("%,d", legenda), (float) (legenda * 100) / total);
     }
 
+    /**
+     * Método responsável por chamar todos os outros relatórios dessa mesma classe
+     * em suas respectivas ordens
+     */
     public void geraRelatorio() {
         String methodName = "";
+
+        /**
+         * Como eu chamo meus métodos em um loop onde o único valor que muda eh o ultimo dígito,
+         * que representa qual dos relatórios está sendo chamado, utilizei dos métodos "getMethod"
+         * e "invoke", responsáveis for facilitar a chamada dos relatórios.
+         * Contudo foi necessário tratar algumas exceções que esses métodos emetiam, como por exemplo:
+         * NoSuchMethodException, quando a variável passada por parâmetro do método "getMethod" não representava nenhuma função dessa classe;
+         * IllegalAccessException e InvocationTargetException, quando havia um erro ao invocar determinado método.
+         */
         for(int i = 1; i <= 10; i++){
             try {
                 methodName = "relatorio" + i;

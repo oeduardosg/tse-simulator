@@ -1,6 +1,9 @@
 
 import java.util.Comparator;
 
+/**
+ * Responsável por comparar Candidatos em relação ao número total de votos
+ */
 public class ComparaCandidatos implements Comparator<Candidato>{
 
     public int compare(Candidato c1, Candidato c2) {
