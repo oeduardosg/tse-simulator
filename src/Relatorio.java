@@ -1,5 +1,5 @@
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.lang.reflect.*;
 
 public class Relatorio {
     private HashMap<Integer, Partido> partidos;
@@ -148,6 +148,11 @@ public class Relatorio {
 
         float total = eleitos_lista.size();
 
+        if(total == 0) {
+            System.out.println("0 eleitos registrados");
+            return;
+        }
+
         System.out.println("Eleitos, por faixa etária (na data da eleição):");
 
         System.out.printf("      Idade < 30: %s (%.2f%%)\n", String.format("%,d", b30), (b30 * 100) / total);
@@ -167,6 +172,11 @@ public class Relatorio {
 
         float total = eleitos_lista.size();
 
+        if(total == 0) {
+            System.out.println("0 eleitos registrados");
+            return;
+        }
+
         System.out.println("Eleitos, por gênero:");
 
         System.out.printf("Feminino: %s (%.2f%%)\n", String.format("%,d", f), (f * 100) / total);
@@ -182,15 +192,29 @@ public class Relatorio {
             nominal += p.getVotosNominais();
         }
 
+        if(total == 0) {
+            System.out.println("0 votos registrados");
+            return;
+        }
+
         System.out.printf("Total de votos válidos: %s\n", String.format("%,d", total));
         System.out.printf("Total de votos nominais: %s (%.2f%%)\n", String.format("%,d", nominal), (float) (nominal * 100) / total);
         System.out.printf("Total de votos de legenda: %s (%.2f%%)\n", String.format("%,d", legenda), (float) (legenda * 100) / total);
     }
 
-    public void geraRelatorio() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
+    public void geraRelatorio() {
+        String methodName = "";
         for(int i = 1; i <= 10; i++){
-            Method method = this.getClass().getMethod("relatorio" + i);
-            method.invoke(this);
+            try {
+                methodName = "relatorio" + i;
+                this.getClass().getMethod(methodName).invoke(this);
+            } catch (NoSuchMethodException exc){
+                System.out.println("Método não encontrado em geraRelatório: " + methodName);
+            } catch (IllegalAccessException | InvocationTargetException exc){
+                System.out.println("Erro ao invocar método em geraRelatório:  " + methodName);
+                exc.printStackTrace();
+            }
+
             System.out.println("");
         }
     }
