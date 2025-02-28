@@ -162,7 +162,7 @@ public class Relatorio {
             Candidato primeiro = p.getCandidadoPosicao(0);
 
             int size = p.getCandidatos().size() - 1;
-            Candidato ultimo = p.getCandidadoPosicao(size--);
+            Candidato ultimo = p.getCandidadoPosicao(size);
 
             if(primeiro.getVotos() > 1) System.out.printf("%s (%d, %s votos) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
             else System.out.printf("%s (%d, %s voto) / ", primeiro.getNome(), primeiro.getNumero(), String.format("%,d", primeiro.getVotos()));
@@ -261,7 +261,7 @@ public class Relatorio {
         String methodName = "";
 
         /**
-         * Como eu chamo meus métodos em um loop onde o único valor que muda eh o ultimo dígito,
+         * Como eu chamo meus métodos em um loop onde o único valor que muda eh o último dígito,
          * que representa qual dos relatórios está sendo chamado, utilizei dos métodos "getMethod"
          * e "invoke", responsáveis for facilitar a chamada dos relatórios.
          * Contudo foi necessário tratar algumas exceções que esses métodos emetiam, como por exemplo:

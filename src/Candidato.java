@@ -91,6 +91,11 @@ public class Candidato {
         votos += novosVotos;
     }
 
+    /**
+     * Imprime candidado de acordo com o padrão de saída da especificação do trabalho
+     * 
+     * @param n posição que deve ser impressa junto com o candidato
+     */
     public void imprimeCandidato(int n) {
         System.out.printf("%d - ", n);
 

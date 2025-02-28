@@ -69,6 +69,13 @@ public class Partido {
         quantidadeEleitos++;
     }
 
+    /**
+     * Organiza a lista de candidatos do partido de acordo com o número de votos
+     * e retorna um Candidadto de uma determinada posição
+     * 
+     * @param pos posição do candidato a ser retornado
+     * @return Candidato da Posicão "pos" da lista ordenada de candidatos
+     */
     public Candidato getCandidadoPosicao(int pos){
         if(this.candidatos.size() == 0) return null;
         List<Candidato> p_candidatos = new LinkedList<Candidato>(this.candidatos.values());
