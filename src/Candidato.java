@@ -9,6 +9,17 @@ public class Candidato {
     private int votos;
     private String dataEleicao;
 
+    /**
+     * Cria um candidato
+     * 
+     * @param numero número do candidato
+     * @param nome apelido ou nome do candidato
+     * @param partido partido do candidato
+     * @param nascimento data de nascimento do candidato
+     * @param genero gênero do candidato (2 para mulher ou 4 para homem)
+     * @param federacao booleano indicando se o candidato é uma federação (True) ou não (False)
+     * @return candidato criado
+     */
     public Candidato(int numero, String nome, Partido partido, String nascimento, int genero, int eleito, String dataEleicao) {
         this.numero = numero;
         this.nome = nome;

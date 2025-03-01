@@ -6,6 +6,17 @@ public class Refinador {
     private HashMap<Integer, Partido> partidos = new HashMap<Integer, Partido>();
     private HashMap<Integer, Candidato> candidatos = new HashMap<Integer, Candidato>();
 
+    /**
+     * Inicializa a classe Refinador, com todas as informações 
+     * úteis que podem ser necessária para gerar os dados refinados
+     * 
+     * @param CIDADE inteiro com código do município
+     * @param CODIFICACAO tipo de codificação a ser utilizada na leitura do arquivo
+     * @param candidatosFile caminho do arquivo de candidatos
+     * @param votacaoFile caminho do arquivo de votação
+     * @param dataEleicao data da eleição
+     * @return objeto com os dados refinados dos arquivos csv
+     */
     public Refinador(int CIDADE, String CODIFICACAO, String candidatosFile, String votacaoFile, String dataEleicao) throws IOException, ParseException {
 
         Leitor arquivoCandidatos = new Leitor(candidatosFile, CODIFICACAO);
@@ -18,12 +29,13 @@ public class Refinador {
             for(int i = 0; i < 11; i++) s.next();
 
             int flagVereador = 1, flagCidade = 1;
-            if(Integer.parseInt(s.next().replace("\"", "")) != CIDADE) {
-                flagCidade = 0;
-            }
+
+            // Seta a flagCidade para 0 caso a cidade lida não seja a do código do município informado
+            if(Integer.parseInt(s.next().replace("\"", "")) != CIDADE) flagCidade = 0;
 
             s.next();
 
+            // Seta a flagVereador para 0 caso o candidato lido não esteja concorrendo ao cargo de vereador
             if(s.nextInt() != 13) flagVereador = 0;
 
             int numero;
@@ -55,6 +67,8 @@ public class Refinador {
                 partidos.put(numeroPartido, new Partido(numeroPartido, nomePartido, federacao));
             }
 
+            // As flags só são verificadas aqui porque precisamos adicionar um partido mesmo caso nenhum vereador tenha concorrido nele,
+            // mas algum prefeito sim
             if(flagVereador == 0 || flagCidade == 0) {
                 linha = arquivoCandidatos.readLine();
                 s.close();
@@ -78,6 +92,7 @@ public class Refinador {
             if(eleicao.equals("ELEITO POR QP")) resultado = 1;
             else if(eleicao.equals("ELEITO POR MÉDIA")) resultado = 2;
 
+            // Vereadores com candidatura inválida não são adicionados à hash de candidatos
             if(eleito > -1){
                 candidato = new Candidato(numero, nome, partidos.get(numeroPartido), nascimento, genero, resultado, dataEleicao);
                 candidatos.put(candidato.getNumero(), candidato);
@@ -99,6 +114,7 @@ public class Refinador {
             Scanner s = new Scanner(linha).useDelimiter(";");
             for(int i = 0; i < 13; i++) s.next();
 
+            // Se não for um voto na cidade que queremos, simplesmente ignora e passa para a próxima linha
             if(Integer.parseInt(s.next().replace("\"", "")) != CIDADE) {
                 linha = arquivoVotos.readLine();
                 s.close();
@@ -109,6 +125,7 @@ public class Refinador {
 
             for(int i = 0; i < 2; i++) s.next();
 
+            // Verifica se é voto de vereador
             if(s.nextInt() != 13) {
                 linha = arquivoVotos.readLine();
                 s.close();
@@ -126,6 +143,7 @@ public class Refinador {
 
             votos = s.nextInt();
 
+            // Filtra votos de legenda e ignora votos brancos ou nulos
             if(numeroCandidato <= 94) {
                 partidos.get(numeroCandidato).adicionaVotosLegenda(votos);
                 linha = arquivoVotos.readLine();

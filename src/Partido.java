@@ -11,6 +11,14 @@ public class Partido {
     private boolean federacao;
     private Comparator<Candidato> comp_candidatos = new ComparaCandidatos();
 
+    /**
+     * Cria um partido
+     * 
+     * @param numero número do partido
+     * @param nome nome do partido
+     * @param federacao booleano indicando se o partido é uma federação (True) ou não (False)
+     * @return partido criado
+     */
     public Partido(int numero, String nome, boolean federacao) {
         this.numero = numero;
         this.nome = nome;

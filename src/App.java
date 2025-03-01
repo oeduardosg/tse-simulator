@@ -14,6 +14,8 @@ public class App {
     
             Relatorio relatorio = new Relatorio(refinador.getCandidatos(), refinador.getPartidos());
             relatorio.geraRelatorio();
+
+        // Mensagens de erro caso algo tenha ocorrido de maneira incorreta nos parâmetros
         } catch(FileNotFoundException exc){
             System.out.println("Arquivo não encontrado: " + exc.getMessage().split(" ")[0]);
         } catch (IOException exc) {

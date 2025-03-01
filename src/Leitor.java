@@ -6,6 +6,12 @@ public class Leitor {
     private InputStreamReader isr;
     private BufferedReader br;
 
+    /**
+     * Cria um leitor
+     * 
+     * @param diretorio caminho dos arquivos
+     * @param codificacao tipo de codificação a ser utilizada na leitura dos arquivos
+     */
     public Leitor(String diretorio, String codificacao) throws IOException {
 
         is = new FileInputStream(diretorio);
