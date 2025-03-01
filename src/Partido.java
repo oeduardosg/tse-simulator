@@ -91,7 +91,7 @@ public class Partido {
      * @return Candidato da Posicão "pos" da lista ordenada de candidatos
      */
     public Candidato getCandidadoPosicao(int pos){
-        if(this.candidatos.size() <= 0) return null;
+        if(this.candidatos.size() <= pos) return null;
         List<Candidato> p_candidatos = new LinkedList<Candidato>(this.candidatos.values());
 
         Collections.sort(p_candidatos, this.comp_candidatos);
