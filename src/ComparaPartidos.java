@@ -1,3 +1,8 @@
+/*
+ * Primeiro Trabalho de Programação Orientada a Objetos (2024/02)
+ * Feito por Eduardo Silva e Gabriel Sena
+ * Fevereiro de 2025
+ */
 
 import java.util.Comparator;
 
